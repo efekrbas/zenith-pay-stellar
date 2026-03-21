@@ -2,9 +2,15 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useWallet } from '@/context/WalletContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { publicKey, isConnected, isConnecting, connect, disconnect } = useWallet();
+
+  const truncateAddress = (address: string) => {
+    return `${address.slice(0, 4)}...${address.slice(-4)}`;
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
@@ -21,9 +27,23 @@ const Navbar = () => {
             <Link href="/dashboard" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Dashboard</Link>
             <Link href="/transactions" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Transactions</Link>
             <Link href="/assets" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Assets</Link>
-            <button className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary/20">
-              Connect Wallet
-            </button>
+            
+            {isConnected ? (
+              <button 
+                onClick={disconnect}
+                className="glass border border-white/20 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all hover:bg-white/10"
+              >
+                {truncateAddress(publicKey!)}
+              </button>
+            ) : (
+              <button 
+                onClick={connect}
+                disabled={isConnecting}
+                className="bg-primary hover:bg-primary/90 disabled:opacity-50 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary/20"
+              >
+                {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+              </button>
+            )}
           </div>
 
           <div className="md:hidden flex items-center">
@@ -50,10 +70,23 @@ const Navbar = () => {
             <Link href="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Dashboard</Link>
             <Link href="/transactions" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Transactions</Link>
             <Link href="/assets" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Assets</Link>
-            <div className="px-3 py-3">
-              <button className="w-full bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary/20">
-                Connect Wallet
-              </button>
+            <div className="px-3 py-3 border-t border-white/5 mt-2">
+              {isConnected ? (
+                <button 
+                  onClick={disconnect}
+                  className="w-full glass border border-white/20 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all"
+                >
+                  {truncateAddress(publicKey!)}
+                </button>
+              ) : (
+                <button 
+                  onClick={connect}
+                  disabled={isConnecting}
+                  className="w-full bg-primary hover:bg-primary/90 disabled:opacity-50 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-lg shadow-primary/20"
+                >
+                  {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+                </button>
+              )}
             </div>
           </div>
         </div>
