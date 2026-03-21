@@ -20,6 +20,7 @@ const Navbar = () => {
           
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/dashboard" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Dashboard</Link>
+            <Link href="/transfer" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Transfer</Link>
             <Link href="/transactions" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Transactions</Link>
             <Link href="/assets" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Assets</Link>
             
@@ -48,6 +49,7 @@ const Navbar = () => {
         <div className="md:hidden glass border-b border-white/10 animate-in slide-in-from-top duration-300">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <Link href="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Dashboard</Link>
+            <Link href="/transfer" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Transfer</Link>
             <Link href="/transactions" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Transactions</Link>
             <Link href="/assets" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors">Assets</Link>
             <div className="px-3 py-3 border-t border-white/5 mt-2">
