@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Keypair, TransactionBuilder, Networks } from 'stellar-sdk';
+import { isRateLimited } from '@/lib/rate-limiter';
+import { validateSponsorship } from '@/lib/stellar/sponsor-validation';
 
 /**
  * API Route: /api/sponsor
@@ -7,6 +9,12 @@ import { Keypair, TransactionBuilder, Networks } from 'stellar-sdk';
  */
 export async function POST(req: NextRequest) {
   try {
+    // 1. IP-based Rate Limiting
+    const ip = req.headers.get('x-forwarded-for') || 'anonymous';
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 });
+    }
+
     const { xdr } = await req.json();
 
     if (!xdr) {
@@ -21,12 +29,22 @@ export async function POST(req: NextRequest) {
     const networkPassphrase = process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE || Networks.TESTNET;
     const sponsorKeypair = Keypair.fromSecret(sponsorSecret);
 
-    // Parse the inner transaction
-    const innerTx = TransactionBuilder.fromXDR(xdr, networkPassphrase);
+    // 2. Parse and Validate the inner transaction
+    let innerTx;
+    try {
+      innerTx = TransactionBuilder.fromXDR(xdr, networkPassphrase);
+    } catch (e) {
+      return NextResponse.json({ error: 'Invalid XDR format or network mismatch.' }, { status: 400 });
+    }
 
-    // Build the Fee Bump transaction
-    // Note: baseFee should be at least the same as the inner transaction's fee + 100 stroops (or according to network rules)
-    // We'll use a standard fee or attempt to derive it.
+    // 3. Security Checks using validation helper
+    // We cast to any for simplicity in this MVP context as stellar-sdk type compatibility can be finicky between versions
+    const validation = validateSponsorship(innerTx as any);
+    if (!validation.isValid) {
+      return NextResponse.json({ error: validation.error }, { status: validation.status });
+    }
+
+    // 4. Build the Fee Bump transaction
     const feeBumpTx = TransactionBuilder.buildFeeBumpTransaction(
       sponsorKeypair,
       '200', // Base fee in stroops for the fee bump itself
