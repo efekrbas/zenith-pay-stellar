@@ -32,6 +32,14 @@ const GaslessTransferForm = () => {
     setModalMessage('Preparing your gasless transfer...');
 
     try {
+      // 0. Validation
+      if (!recipient || recipient.length < 50) {
+        throw new Error('Please enter a valid Stellar recipient address.');
+      }
+      if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+        throw new Error('Please enter a valid amount greater than 0.');
+      }
+
       const asset = selectedAsset === 'native'
         ? Asset.native()
         : new Asset(selectedAsset.split(':')[0], selectedAsset.split(':')[1]);
