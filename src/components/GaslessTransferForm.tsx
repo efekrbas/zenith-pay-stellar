@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { useWallet } from '@/context/WalletContext';
 import { useAccountData } from '@/hooks/useAccountData';
-import { Asset, Networks, TransactionBuilder, Operation } from 'stellar-sdk';
-import { horizonServer } from '@/lib/stellar/stellar';
+import { Asset, TransactionBuilder, Operation } from 'stellar-sdk';
+import { horizonServer, stellarConfig } from '@/lib/stellar/stellar';
 import { getStellarErrorMessage } from '@/lib/stellar/error-handler';
 import TransactionStatusModal from './TransactionStatusModal';
 import { withErrorBoundary } from "@sentry/nextjs";
@@ -37,10 +37,13 @@ const GaslessTransferForm = () => {
         : new Asset(selectedAsset.split(':')[0], selectedAsset.split(':')[1]);
 
       // 1. Build the transaction on the client
+      const TESTNET_PASSPHRASE = 'Test SDF Network ; September 2015';
+      console.log('Building transaction with network:', TESTNET_PASSPHRASE);
+      
       const account = await horizonServer.loadAccount(publicKey);
       const transaction = new TransactionBuilder(account, {
-        fee: '100', // Base fee (will be sponsored)
-        networkPassphrase: process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE || Networks.TESTNET,
+        fee: '100',
+        networkPassphrase: TESTNET_PASSPHRASE,
       })
         .addOperation(Operation.payment({
           destination: recipient,
@@ -51,8 +54,19 @@ const GaslessTransferForm = () => {
         .build();
 
       // 2. Request user signature via Freighter
-      const { signedTxXdr } = await signTransaction(transaction.toXDR());
+      // We explicitly pass the networkPassphrase here to override any auto-detection issues in Freighter
+      const signatureResult = await signTransaction(transaction.toXDR(), {
+        networkPassphrase: 'Test SDF Network ; September 2015'
+      });
+      console.log('Freighter signature result:', signatureResult);
       
+      const signedTxXdr = (signatureResult as any).signedTxXdr || signatureResult;
+      console.log('Final signed XDR being sent:', signedTxXdr);
+      
+      if (!signedTxXdr || typeof signedTxXdr !== 'string') {
+        throw new Error('Failed to get signature from Freighter. Ensure you clicked "Approve".');
+      }
+
       // 3. Send to our sponsorship API
       setModalMessage('Sponsoring transaction fees...');
       const sponsorResponse = await fetch('/api/sponsor', {
@@ -71,7 +85,7 @@ const GaslessTransferForm = () => {
       // 4. Submit the sponsored transaction to the network
       setModalMessage('Submitting to Stellar network...');
       const result = await horizonServer.submitTransaction(
-        TransactionBuilder.fromXDR(sponsoredXdr, process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE || Networks.TESTNET) as any
+        TransactionBuilder.fromXDR(sponsoredXdr, 'Test SDF Network ; September 2015') as any
       );
 
       setTxHash(result.hash);
@@ -100,8 +114,17 @@ const GaslessTransferForm = () => {
       refresh();
     } catch (error: any) {
       console.error('Transfer failed:', error);
+      
+      // Extract detailed Stellar error if available
+      let detailMessage = getStellarErrorMessage(error);
+      if (error.response?.data?.extras?.result_codes) {
+        const codes = error.response.data.extras.result_codes;
+        detailMessage += ` (Error codes: ${JSON.stringify(codes)})`;
+        console.error('Stellar Result Codes:', codes);
+      }
+      
       setModalState('failed');
-      setModalMessage(getStellarErrorMessage(error));
+      setModalMessage(detailMessage);
     } finally {
       setIsLoading(false);
     }

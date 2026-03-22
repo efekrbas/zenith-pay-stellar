@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Keypair, TransactionBuilder, Networks } from 'stellar-sdk';
+import { Keypair, TransactionBuilder } from 'stellar-sdk';
+import { stellarConfig } from '@/lib/stellar/stellar';
 import { isRateLimited } from '@/lib/rate-limiter';
 import { validateSponsorship } from '@/lib/stellar/sponsor-validation';
 
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Sponsor key not configured on server.' }, { status: 500 });
     }
 
-    const networkPassphrase = process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE || Networks.TESTNET;
+    const networkPassphrase = stellarConfig.networkPassphrase;
     const sponsorKeypair = Keypair.fromSecret(sponsorSecret);
 
     // 2. Parse and Validate the inner transaction

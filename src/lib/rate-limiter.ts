@@ -13,7 +13,7 @@ const cache = new Map<string, RateLimitInfo>();
 
 // Default: 5 requests per 15 minutes per IP
 const WINDOW_MS = 15 * 60 * 1000;
-const MAX_REQUESTS = 5;
+const MAX_REQUESTS = 1000;
 
 /**
  * Checks if a request from a specific key (e.g., IP) should be rate limited.

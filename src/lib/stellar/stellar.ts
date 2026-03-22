@@ -7,7 +7,7 @@ import { Horizon, Networks } from 'stellar-sdk';
 
 const network = process.env.NEXT_PUBLIC_STELLAR_NETWORK || 'testnet';
 const horizonUrl = process.env.NEXT_PUBLIC_HORIZON_URL || 'https://horizon-testnet.stellar.org';
-const networkPassphrase = process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE || Networks.TESTNET;
+const networkPassphrase = 'Test SDF Network ; September 2015';
 
 // Initialize Horizon Server
 export const horizonServer = new Horizon.Server(horizonUrl);
