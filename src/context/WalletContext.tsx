@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { isConnected, getAddress, signTransaction } from '@stellar/freighter-api';
+import { isConnected, getAddress, signTransaction, setAllowed } from '@stellar/freighter-api';
 
 interface WalletContextType {
   publicKey: string | null;
@@ -25,7 +25,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       const result = await isConnected();
       if (result.isConnected) {
-        // Optional: restore session if needed
+        // We don't auto-connect for security, but we could check if already allowed
       }
     } catch (err) {
       console.error('Error checking wallet connection:', err);
@@ -45,14 +45,19 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         throw new Error('Freighter extension not found. Please install it.');
       }
 
+      // Explicitly request access for this website
+      // This will trigger the "Allow" popup if not already allowed
+      await setAllowed();
+
       const result = await getAddress();
       if (result.address) {
         setPublicKey(result.address);
         setIsWalletConnected(true);
+        setError(null);
       } else if (result.error) {
         throw new Error(result.error);
       } else {
-        throw new Error('Could not retrieve public key. Please unlock Freighter.');
+        throw new Error('Could not retrieve public key. Please ensure your wallet is unlocked and permission is granted.');
       }
     } catch (err: any) {
       console.error('Connection failed:', err);
