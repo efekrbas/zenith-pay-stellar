@@ -38,8 +38,8 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
           <p>&copy; {new Date().getFullYear()} ZenithPay. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="https://github.com/efekrbas/zenith-pay-stellar/blob/main/SECURITY_CHECKLIST.md" target="_blank" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="https://github.com/efekrbas/zenith-pay-stellar/blob/main/SECURITY_CHECKLIST.md" target="_blank" className="hover:text-white transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>
