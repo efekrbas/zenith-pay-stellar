@@ -9,10 +9,19 @@ interface ConnectWalletProps {
 }
 
 const ConnectWallet: React.FC<ConnectWalletProps> = ({ className = "" }) => {
-  const { publicKey, isConnected, isConnecting, connect, disconnect } = useWallet();
+  const { publicKey, isConnected, isConnecting, error, connect, disconnect } = useWallet();
   const [showDetails, setShowDetails] = useState(false);
   const [copied, setCopied] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      setShowError(true);
+      const timer = setTimeout(() => setShowError(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const truncateAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-6)}`;
@@ -91,7 +100,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ className = "" }) => {
                   ) : (
                     <>
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 012-2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                       </svg>
                       Copy
                     </>
@@ -116,7 +125,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ className = "" }) => {
   }
 
   return (
-    <div className={`flex items-center space-x-3 ${className}`}>
+    <div className={`relative flex items-center space-x-3 ${className}`}>
       {/* Status Indicator: Disconnected */}
       <div className="hidden sm:flex items-center space-x-1.5 px-2 py-1 rounded-full bg-gray-500/10 border border-gray-500/20">
         <span className="h-2 w-2 rounded-full bg-gray-500"></span>
@@ -140,6 +149,18 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ className = "" }) => {
           'Connect Wallet'
         )}
       </button>
+
+      {/* Error Toast */}
+      {showError && error && (
+        <div className="absolute top-12 right-0 w-64 p-3 bg-rose-500/95 text-white text-[10px] font-bold rounded-xl shadow-xl animate-in slide-in-from-top-2 duration-300 z-[100] border border-white/10 backdrop-blur-md">
+          <div className="flex items-center gap-2">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{error}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
