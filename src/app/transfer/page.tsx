@@ -2,10 +2,11 @@
 
 import React from 'react';
 import GaslessTransferForm from '@/components/GaslessTransferForm';
+import RecentActivity from '@/components/RecentActivity';
 
 export default function TransferPage() {
   return (
-    <div className="container mx-auto px-4 py-20 min-h-[calc(100vh-80px)] flex flex-col items-center justify-center">
+    <div className="container mx-auto px-4 py-20 min-h-[calc(100vh-80px)] flex flex-col items-center">
       <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
           Seamless <span className="text-gradient">Transfers</span>
@@ -17,6 +18,10 @@ export default function TransferPage() {
       
       <div className="w-full animate-in fade-in slide-in-from-bottom-8 duration-1000">
         <GaslessTransferForm />
+      </div>
+
+      <div className="w-full animate-in fade-in slide-in-from-bottom-12 duration-1200 mt-12">
+        <RecentActivity />
       </div>
 
       {/* Decorative background elements */}
