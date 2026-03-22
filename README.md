@@ -8,6 +8,31 @@ Zenith Pay is a premium fintech solution built on the Stellar network, enabling 
 - **Demo Video**: [YouTube Link](https://youtube.com/watch?v=placeholder)
 - **Architecture Document**: [Zenith Pay Architecture](./ARCHITECTURE.md) (Optional)
 
+## 🏗️ Architecture
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Wallet as Freighter Wallet
+    participant Frontend as Zenith Pay UI
+    participant Backend as Sponsorship API
+    participant Stellar as Stellar Network
+
+    User->>Frontend: Enter transfer details
+    Frontend->>Frontend: Build Transaction (XDR)
+    Frontend->>Wallet: Request Signature
+    Wallet-->>User: Approval Prompt
+    User->>Wallet: Sign Transaction
+    Wallet-->>Frontend: Signed XDR
+    Frontend->>Backend: POST /api/sponsor (Signed XDR)
+    Backend->>Backend: Validate Transaction
+    Backend->>Backend: Wrap with Fee Bump (Sponsor Key)
+    Backend-->>Frontend: Sponsored XDR
+    Frontend->>Stellar: Submit Transaction
+    Stellar-->>Frontend: Success (Tx Hash)
+    Frontend->>User: Show Success Modal
+```
+
 ![Zenith Pay Dashboard](./public/screenshots/dashboard.png)
 
 ## ✨ Key Features
