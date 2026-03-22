@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const feeBumpTx = TransactionBuilder.buildFeeBumpTransaction(
       sponsorKeypair,
       '200', // Base fee in stroops for the fee bump itself
-      innerTx,
+      innerTx as any,
       networkPassphrase
     );
 
