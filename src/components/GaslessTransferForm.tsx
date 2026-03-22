@@ -164,7 +164,7 @@ const GaslessTransferForm = () => {
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all appearance-none cursor-pointer"
               >
                 <option value="native" className="bg-[#0f172a]">XLM (Native)</option>
-                <option value="USDC:GA2BYV7QJ75ZAZXQBEDX5CAYXIRMXELJYRK5O6IHF2RLCDKVQU2ZSKBU" className="bg-[#0f172a]">USDC</option>
+                <option value="USDC:GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5" className="bg-[#0f172a]">USDC</option>
               </select>
             </div>
 
