@@ -90,7 +90,7 @@ The following wallets have successfully interacted with Zenith Pay on the Stella
 
 ## 🤝 Community Contribution
 
-- **Twitter Presentation**: [View Thread on Twitter](https://twitter.com/placeholder/status/123456789)
+- **Twitter Presentation**: [View Thread on Twitter](https://x.com/efekrbs/status/2035821925939703946)
 - **Stellar Discord**: Zenith Pay featured in #showcase.
 
 ## 🚀 Getting Started
