@@ -138,7 +138,21 @@ const MetricsDashboard = () => {
           </div>
           <div className="flex gap-3">
             <button className="px-5 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white hover:bg-white/10 transition-all">Last 7 Days</button>
-            <button className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all">Export Data</button>
+            <button 
+              onClick={() => {
+                const csvHeader = "Date,Transactions,Users\n";
+                const csvRows = data.map(d => `${d.name},${d.count},${d.users}`).join("\n");
+                const blob = new Blob([csvHeader + csvRows], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.setAttribute('href', url);
+                a.setAttribute('download', `zenith-stats-${new Date().toISOString().split('T')[0]}.csv`);
+                a.click();
+              }}
+              className="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all font-outfit"
+            >
+              Export CSV
+            </button>
           </div>
         </div>
 
