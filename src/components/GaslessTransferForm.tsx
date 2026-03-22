@@ -119,6 +119,7 @@ const GaslessTransferForm = () => {
       console.error('Transfer failed:', error);
 
       // Extract detailed Stellar error if available
+      let detailMessage = getStellarErrorMessage(error);
       if (error.response?.data) {
         console.error('Full Horizon Error Data:', error.response.data);
       }
