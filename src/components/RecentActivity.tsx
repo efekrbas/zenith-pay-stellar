@@ -96,8 +96,8 @@ const RecentActivity = () => {
               <thead>
                 <tr className="bg-white/[0.02] border-b border-white/5">
                   <th className="px-8 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest leading-none">Asset & Amount</th>
-                  <th className="px-8 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest leading-none">Recipient</th>
-                  <th className="px-8 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest leading-none">Time</th>
+                  <th className="hidden md:table-cell px-8 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest leading-none">Recipient</th>
+                  <th className="hidden sm:table-cell px-8 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest leading-none">Time</th>
                   <th className="px-8 py-5 text-xs font-bold text-gray-500 uppercase tracking-widest leading-none text-right">Explorer</th>
                 </tr>
               </thead>
