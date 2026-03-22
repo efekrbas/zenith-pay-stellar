@@ -87,7 +87,6 @@ const GaslessTransferForm = () => {
         TransactionBuilder.fromXDR(sponsoredXdr, process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE || Networks.TESTNET)
       );
 
-      console.log('Transaction success:', result);
       setTxHash(result.hash);
       setModalState('success');
       setModalMessage(`Your transfer of ${amount} ${selectedAsset === 'native' ? 'XLM' : selectedAsset.split(':')[0]} was successful.`);

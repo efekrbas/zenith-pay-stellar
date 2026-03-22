@@ -2,7 +2,11 @@
 
 Zenith Pay is a premium fintech solution built on the Stellar network, enabling users to send assets globally with **zero network fees**. Our advanced fee sponsorship architecture handles the XLM costs, providing a seamless, "gasless" experience for everyone.
 
-![Zenith Pay Dashboard](./public/screenshots/dashboard.png)
+## 🔗 Live Demo & Presentation
+
+- **Live Demo**: [zenith-pay-stellar.vercel.app](https://zenith-pay-stellar.vercel.app)
+- **Demo Video**: [YouTube Link](https://youtube.com/watch?v=placeholder)
+- **Architecture Document**: [Zenith Pay Architecture](./ARCHITECTURE.md) (Optional)
 
 ## ✨ Key Features
 
