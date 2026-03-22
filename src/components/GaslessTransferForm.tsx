@@ -171,6 +171,7 @@ const GaslessTransferForm = () => {
       </div>
 
       <TransactionStatusModal
+        isOpen={modalState !== 'idle'}
         state={modalState}
         message={modalMessage}
         txHash={txHash}
