@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { isConnected, getAddress } from '@stellar/freighter-api';
+import { isConnected, getAddress, signTransaction } from '@stellar/freighter-api';
 
 interface WalletContextType {
   publicKey: string | null;
@@ -10,6 +10,7 @@ interface WalletContextType {
   error: string | null;
   connect: () => Promise<void>;
   disconnect: () => void;
+  signTransaction: (xdr: string, opts?: { networkPassphrase?: string; address?: string; }) => Promise<{ signedTxXdr: string; signerAddress: string; }>;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -76,6 +77,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         error,
         connect,
         disconnect,
+        signTransaction,
       }}
     >
       {children}

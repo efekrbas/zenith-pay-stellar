@@ -3,15 +3,15 @@
 import React, { useState } from 'react';
 import { useWallet } from '@/context/WalletContext';
 import { useAccountData } from '@/hooks/useAccountData';
+import { Asset, Networks, TransactionBuilder, Operation } from 'stellar-sdk';
 import { horizonServer } from '@/lib/stellar/stellar';
 import { getStellarErrorMessage } from '@/lib/stellar/error-handler';
-import { Asset, Networks, TransactionBuilder, FeeBumpTransaction } from '@stellar/stellar-sdk';
 import TransactionStatusModal from './TransactionStatusModal';
 import { withErrorBoundary } from "@sentry/nextjs";
 
 const GaslessTransferForm = () => {
   const { publicKey, signTransaction } = useWallet();
-  const { refreshData } = useAccountData();
+  const { refresh } = useAccountData();
   
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
@@ -42,22 +42,23 @@ const GaslessTransferForm = () => {
         fee: '100', // Base fee (will be sponsored)
         networkPassphrase: process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE || Networks.TESTNET,
       })
-        .addOperation(Asset.native().payment({
+        .addOperation(Operation.payment({
           destination: recipient,
+          asset: asset,
           amount: amount,
         }))
         .setTimeout(60)
         .build();
 
       // 2. Request user signature via Freighter
-      const signedTx = await signTransaction(transaction.toXDR());
+      const { signedTxXdr } = await signTransaction(transaction.toXDR());
       
       // 3. Send to our sponsorship API
       setModalMessage('Sponsoring transaction fees...');
       const sponsorResponse = await fetch('/api/sponsor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ transactionXdr: signedTx }),
+        body: JSON.stringify({ xdr: signedTxXdr }),
       });
 
       if (!sponsorResponse.ok) {
@@ -65,7 +66,7 @@ const GaslessTransferForm = () => {
         throw new Error(errorData.error || 'Sponsorship failed');
       }
 
-      const { sponsoredXdr } = await sponsorResponse.json();
+      const { xdr: sponsoredXdr } = await sponsorResponse.json();
 
       // 4. Submit the sponsored transaction to the network
       setModalMessage('Submitting to Stellar network...');
@@ -96,7 +97,7 @@ const GaslessTransferForm = () => {
 
       setRecipient('');
       setAmount('');
-      refreshData();
+      refresh();
     } catch (error: any) {
       console.error('Transfer failed:', error);
       setModalState('failed');
