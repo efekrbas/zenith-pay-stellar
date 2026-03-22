@@ -28,6 +28,7 @@ const MetricsDashboard = () => {
     totalTransactions: 0,
     uniqueUsers: 0,
     totalVolume: 0,
+    xlmSaved: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -78,9 +79,11 @@ const MetricsDashboard = () => {
             { name: 'Mar 21', count: 35, users: 18 },
           ]);
           setStats({
+          setStats({
             totalTransactions: 158,
             uniqueUsers: 42,
             totalVolume: 12450.50,
+            xlmSaved: 158 * 0.0001,
           });
         } else {
           setData(chartFormatted);
@@ -88,6 +91,7 @@ const MetricsDashboard = () => {
             totalTransactions: transactions.length,
             uniqueUsers: allUsers.size,
             totalVolume: volume,
+            xlmSaved: transactions.length * 0.0001,
           });
         }
       } catch (error) {
@@ -140,7 +144,7 @@ const MetricsDashboard = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
           <Card 
             title="Total Transactions" 
             value={stats.totalTransactions.toLocaleString()}
@@ -156,11 +160,18 @@ const MetricsDashboard = () => {
             icon={<svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
           />
           <Card 
-            title="Sponsorship Volume" 
-            value={`${stats.totalVolume.toLocaleString()} units`}
-            sub="Indexed asset throughput"
+            title="Asset Volume" 
+            value={`${stats.totalVolume.toLocaleString()}`}
+            sub="Total units processed"
             trend="+15.1%"
             icon={<svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          />
+          <Card 
+            title="XLM Fees Saved" 
+            value={`${stats.xlmSaved.toFixed(4)} XLM`}
+            sub="Total sponsorship impact"
+            trend="+100%"
+            icon={<svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>}
           />
         </div>
 
