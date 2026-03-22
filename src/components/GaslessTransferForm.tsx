@@ -92,6 +92,24 @@ const GaslessTransferForm = () => {
       setModalState('success');
       setModalMessage(`Your transfer of ${amount} ${selectedAsset === 'native' ? 'XLM' : selectedAsset.split(':')[0]} was successful.`);
       
+      // Index the transaction
+      try {
+        await fetch('/api/transactions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            hash: result.hash,
+            sender: publicKey,
+            recipient: recipient,
+            amount: amount,
+            asset: selectedAsset === 'native' ? 'XLM' : selectedAsset.split(':')[0]
+          }),
+        });
+      } catch (indexError) {
+        console.error('Failed to index transaction:', indexError);
+        // Non-blocking error
+      }
+
       setRecipient('');
       setAmount('');
       refresh();
