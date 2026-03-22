@@ -5,7 +5,7 @@ Zenith Pay is a premium fintech solution built on the Stellar network, enabling 
 ## 🔗 Live Demo & Presentation
 
 - **Live Demo**: [zenith-pay-stellar.vercel.app](https://zenith-pay-stellar.vercel.app)
-- **Demo Video**: [YouTube Link](https://youtube.com/watch?v=placeholder)
+- **Demo Video**: [Zenith Pay - Gasless Stellar Demo](https://www.youtube.com/watch?v=Ua1FBjYgtPE)
 - **Architecture Document**: [Zenith Pay Architecture](./ARCHITECTURE.md) (Optional)
 
 ## 🏗️ Architecture
