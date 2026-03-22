@@ -28,9 +28,9 @@ const Footer = () => {
           <div>
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Resources</h3>
             <ul className="space-y-2">
-              <li><Link href="https://stellar.org" className="text-gray-400 hover:text-primary text-sm transition-colors">Stellar Network</Link></li>
-              <li><Link href="#" className="text-gray-400 hover:text-primary text-sm transition-colors">Documentation</Link></li>
-              <li><Link href="#" className="text-gray-400 hover:text-primary text-sm transition-colors">Support</Link></li>
+              <li><Link href="https://stellar.org" target="_blank" className="text-gray-400 hover:text-primary text-sm transition-colors">Stellar Network</Link></li>
+              <li><Link href="https://github.com/efekrbas/zenith-pay-stellar/blob/main/USER_GUIDE.md" target="_blank" className="text-gray-400 hover:text-primary text-sm transition-colors">Documentation</Link></li>
+              <li><Link href="https://discord.gg/stellardev" target="_blank" className="text-gray-400 hover:text-primary text-sm transition-colors">Support</Link></li>
             </ul>
           </div>
         </div>
