@@ -20,8 +20,8 @@ const Footer = () => {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Platform</h3>
             <ul className="space-y-2">
               <li><Link href="/dashboard" className="text-gray-400 hover:text-primary text-sm transition-colors">Dashboard</Link></li>
-              <li><Link href="/transactions" className="text-gray-400 hover:text-primary text-sm transition-colors">Transactions</Link></li>
-              <li><Link href="/assets" className="text-gray-400 hover:text-primary text-sm transition-colors">Wallet</Link></li>
+              <li><Link href="/transfer" className="text-gray-400 hover:text-primary text-sm transition-colors">Transactions</Link></li>
+              <li><Link href="/transfer" className="text-gray-400 hover:text-primary text-sm transition-colors">Wallet</Link></li>
             </ul>
           </div>
 
