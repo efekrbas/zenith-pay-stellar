@@ -79,7 +79,6 @@ const MetricsDashboard = () => {
             { name: 'Mar 21', count: 35, users: 18 },
           ]);
           setStats({
-          setStats({
             totalTransactions: 158,
             uniqueUsers: 42,
             totalVolume: 12450.50,
