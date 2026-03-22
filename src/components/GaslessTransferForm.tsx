@@ -77,7 +77,10 @@ const GaslessTransferForm = () => {
 
       if (!sponsorResponse.ok) {
         const errorData = await sponsorResponse.json();
-        throw new Error(errorData.error || 'Sponsorship failed');
+        const errorMessage = errorData.details 
+          ? `${errorData.error} (${errorData.details})`
+          : errorData.error || 'Sponsorship failed';
+        throw new Error(errorMessage);
       }
 
       const { xdr: sponsoredXdr } = await sponsorResponse.json();

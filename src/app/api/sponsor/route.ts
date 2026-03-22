@@ -22,13 +22,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Transaction XDR is required.' }, { status: 400 });
     }
 
-    const sponsorSecret = process.env.SPONSOR_SECRET_KEY;
+    const sponsorSecret = process.env.SPONSOR_SECRET_KEY?.trim();
     if (!sponsorSecret) {
       return NextResponse.json({ error: 'Sponsor key not configured on server.' }, { status: 500 });
     }
 
     const networkPassphrase = stellarConfig.networkPassphrase;
-    const sponsorKeypair = Keypair.fromSecret(sponsorSecret);
+    let sponsorKeypair;
+    try {
+      sponsorKeypair = Keypair.fromSecret(sponsorSecret);
+    } catch (e: any) {
+      return NextResponse.json({ error: 'Sponsor key is invalid format.', details: e.message }, { status: 500 });
+    }
 
     // 2. Parse and Validate the inner transaction
     let innerTx;
