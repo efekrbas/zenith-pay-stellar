@@ -12,12 +12,12 @@ import { withErrorBoundary } from "@sentry/nextjs";
 const GaslessTransferForm = () => {
   const { publicKey, signTransaction } = useWallet();
   const { refresh } = useAccountData();
-  
+
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [selectedAsset, setSelectedAsset] = useState('native');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Modal State
   const [modalState, setModalState] = useState<'idle' | 'pending' | 'success' | 'failed'>('idle');
   const [modalMessage, setModalMessage] = useState('');
@@ -32,14 +32,14 @@ const GaslessTransferForm = () => {
     setModalMessage('Preparing your gasless transfer...');
 
     try {
-      const asset = selectedAsset === 'native' 
-        ? Asset.native() 
+      const asset = selectedAsset === 'native'
+        ? Asset.native()
         : new Asset(selectedAsset.split(':')[0], selectedAsset.split(':')[1]);
 
       // 1. Build the transaction on the client
       const TESTNET_PASSPHRASE = 'Test SDF Network ; September 2015';
       console.log('Building transaction with network:', TESTNET_PASSPHRASE);
-      
+
       const account = await horizonServer.loadAccount(publicKey);
       const transaction = new TransactionBuilder(account, {
         fee: '100',
@@ -59,10 +59,10 @@ const GaslessTransferForm = () => {
         networkPassphrase: 'Test SDF Network ; September 2015'
       });
       console.log('Freighter signature result:', signatureResult);
-      
+
       const signedTxXdr = (signatureResult as any).signedTxXdr || signatureResult;
       console.log('Final signed XDR being sent:', signedTxXdr);
-      
+
       if (!signedTxXdr || typeof signedTxXdr !== 'string') {
         throw new Error('Failed to get signature from Freighter. Ensure you clicked "Approve".');
       }
@@ -114,7 +114,7 @@ const GaslessTransferForm = () => {
       refresh();
     } catch (error: any) {
       console.error('Transfer failed:', error);
-      
+
       // Extract detailed Stellar error if available
       let detailMessage = getStellarErrorMessage(error);
       if (error.response?.data?.extras?.result_codes) {
@@ -122,7 +122,7 @@ const GaslessTransferForm = () => {
         detailMessage += ` (Error codes: ${JSON.stringify(codes)})`;
         console.error('Stellar Result Codes:', codes);
       }
-      
+
       setModalState('failed');
       setModalMessage(detailMessage);
     } finally {
@@ -135,7 +135,7 @@ const GaslessTransferForm = () => {
       <div className="glass border border-white/10 rounded-[2.5rem] p-8 md:p-12 max-w-2xl mx-auto shadow-2xl relative overflow-hidden group">
         {/* Subtle background glow */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700" />
-        
+
         <form onSubmit={handleSubmit} className="space-y-8 relative">
           <div className="space-y-2">
             <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Recipient Address</label>
@@ -158,7 +158,7 @@ const GaslessTransferForm = () => {
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all appearance-none cursor-pointer"
               >
                 <option value="native" className="bg-[#0f172a]">XLM (Native)</option>
-                <option value="USDC:GA5ZSEJYB37JRC5AVCIAZDL2Y34I3S7H36Z2DKEV2K2G3GXS2XN6GZGA" className="bg-[#0f172a]">USDC</option>
+                <option value="USDC:GBBD47OIRG2ZFBPUJ66D7YIXX5QPRFXC6D5T3G43J7RFLZ47E3A63QW7" className="bg-[#0f172a]">USDC</option>
               </select>
             </div>
 
@@ -179,11 +179,10 @@ const GaslessTransferForm = () => {
           <button
             type="submit"
             disabled={isLoading || !publicKey}
-            className={`w-full py-5 rounded-2xl font-bold tracking-widest uppercase text-sm transition-all duration-300 shadow-xl shadow-primary/20 ${
-              isLoading || !publicKey
+            className={`w-full py-5 rounded-2xl font-bold tracking-widest uppercase text-sm transition-all duration-300 shadow-xl shadow-primary/20 ${isLoading || !publicKey
                 ? 'bg-gray-800 text-gray-500 cursor-not-allowed border border-white/5'
                 : 'bg-primary text-white hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98]'
-            }`}
+              }`}
           >
             {isLoading ? 'Processing...' : publicKey ? 'Confirm Gasless Transfer' : 'Connect Wallet First'}
           </button>
@@ -205,6 +204,6 @@ const GaslessTransferForm = () => {
   );
 };
 
-export default withErrorBoundary(GaslessTransferForm, { 
-  fallback: <div className="glass p-8 text-center text-red-400">Something went wrong with the transfer form.</div> 
+export default withErrorBoundary(GaslessTransferForm, {
+  fallback: <div className="glass p-8 text-center text-red-400">Something went wrong with the transfer form.</div>
 });
